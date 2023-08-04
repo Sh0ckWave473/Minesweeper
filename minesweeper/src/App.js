@@ -1,5 +1,5 @@
 import './App.css';
-//import React, { useState } from 'react';
+import React, { useState } from 'react';
 
 function App() {
   return (
@@ -11,41 +11,49 @@ function App() {
 }
 
 function Board() {
-  const cells = createBoard(2, 2);
-
-  const renderCells = () => {
+  const cells = createBoard(8, 8);
+  
   return cells.map((row) => {
       return( row.map((item) => {
           return(
             <>
               <Cell
                 numSurroundingBombs={item.numSurroundingBombs}
+                id={`${item.row}-${item.col}`}
                 row={item.row}
                 col={item.col}
                 isFlagged={item.isFlagged}
                 isClicked={item.isClicked}
                 isBomb={item.isBomb}
               />
+              {row[row.length-1] === item ? <span className='break'></span> : ""}
             </>
           );
         })
       );
-    });
-  ;}
-
-  return {renderCells};
+    });;
 }
 
-function Cell({numSurroundingBombs, row, col, isFlagged, isClicked, isBomb}) {
+function Cell(props) {
+  const [isClicked, setIsClicked] = useState(props.isClicked);
+  const [isFlagged, setIsFlagged] = useState(props.isFlagged);
+  
    return (
-    <div className="Cell" id={`${row}-${col}`}>{numSurroundingBombs}</div>
-    //<div className="Cell">1</div>
+    <div className="Cell" id={props.id} 
+    onClick={() => {
+        if(!isClicked)
+          setIsClicked(true);
+      }
+    }
+    click>
+      {isClicked ? props.isBomb ? "💣" : `${props.numSurroundingBombs}` : ""}
+    </div>
    );
 }
 
 function createBoard(r, c) {
   const grid = [];
-  const numBombs = Math.floor((r * c) / 3);
+  const numBombs = Math.floor((r * c) / 4.5);
 
   for (let i = 0; i < r; i++){
       const row = [];
@@ -57,7 +65,7 @@ function createBoard(r, c) {
   for (let i = 0; i < numBombs; i++){
       const randRow = Math.floor(Math.random() * r);
       const randCol = Math.floor(Math.random() * c);
-      grid[randRow][randCol] === 0 ? grid[randRow][randCol].isBomb = true : i--;
+      !grid[randRow][randCol].isBomb ? grid[randRow][randCol].isBomb = true : i--;
   }
 
   for (let i = 0; i < r; i++){
