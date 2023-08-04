@@ -36,7 +36,7 @@ function Board() {
 
 function Cell(props) {
   const [isClicked, setIsClicked] = useState(props.isClicked);
-  const [isFlagged, setIsFlagged] = useState(props.isFlagged);
+  //const [isFlagged, setIsFlagged] = useState(props.isFlagged);
   
    return (
     <div className="Cell" id={props.id} 
