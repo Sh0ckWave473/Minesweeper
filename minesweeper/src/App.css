@@ -13,6 +13,10 @@ h2 {
   margin: auto;
 }
 
+h5 {
+  margin: auto;
+}
+
 .break {
   display: block;
   margin-bottom: 0.25em;
@@ -32,4 +36,47 @@ h2 {
   color: #282c34;
   text-shadow: black 1px 1px;
   font-weight: bold;
+  user-select: none;
+}
+
+.helpButton {
+  display: inline-block;
+  background-color: lightgrey;
+  border-radius: 100px;
+  padding: 0px 10px 0px 10px;
+}
+
+.helpScreen {
+  position: absolute;
+  visibility: hidden;
+  background-color: #98a2b6;
+  opacity: 85%;
+  transform-origin: center;
+  font-size: x-large;
+  color: black;
+  left: 50%;
+  top: 50%;
+  width: 14.75em;
+  margin-left: -7.5em;
+  margin-top: -300px;
+  height: 11em;
+  border: 1px double black;
+}
+
+.LoseScreen {
+  position: absolute;
+  visibility: hidden;
+  background-color: #98a2b6;
+  opacity: 85%;
+  transform-origin: center;
+  left: 50%;
+  top: 50%;
+  width: 7.5em;
+  margin-left: -3.75em;
+  margin-top: -8.5em;
+  height: 8em;
+}
+
+.visibility {
+  visibility: visible;
 }

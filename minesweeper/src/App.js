@@ -2,17 +2,44 @@ import './App.css';
 import React, { useState } from 'react';
 
 function App() {
+  const numBombs = Math.floor((8 * 8) / 4.5);
+
   return (
-  <div className="App">
-    <h2>MINESWEEPER</h2>
-    <Board />
-  </div>
+    <div className="App">
+      <h2>MINESWEEPER</h2>
+      <Board dimension="8" difficulty="4.5"/>
+      <h5>Number of Bombs: {numBombs}</h5>
+      <div className='helpButton'
+      onClick={() => {
+        const helpScreen = document.getElementById("helpScreen");
+        if(helpScreen?.classList.contains("visibility"))
+          helpScreen?.classList.remove("visibility");
+        else
+          helpScreen?.classList.add("visibility");
+      }}
+      ><i className="fa-sharp fa-solid fa-question" /></div>
+      <div className='LoseScreen' id="LoseScreen"><h4>You Lose</h4>Refresh to try again!</div>
+      <div className='helpScreen' id='helpScreen'>
+        Left Click (tap the screen) to reveal the square.<br />
+        Right Click (hold the screen) to place a flag.<br />
+        Reveal all the squares without bombs to win!<br />
+        Click the help button to close this popup.
+      </div>
+    </div>
   );
 }
 
-function Board() {
-  const cells = createBoard(8, 8);
-  
+function Board(props) {
+  const cells = createBoard(props.dimension, props.dimension, props.difficulty);
+  // const clearBoard = () => {
+  //   cells.map((row) => {
+  //     row.map((item) => {
+  //       item.isFlagged = false;
+  //       item.isClicked = true;
+  //     });
+  //   });
+  // }
+
   return cells.map((row) => {
       return( row.map((item) => {
           return(
@@ -25,6 +52,7 @@ function Board() {
                 isFlagged={item.isFlagged}
                 isClicked={item.isClicked}
                 isBomb={item.isBomb}
+                //clearBoard={clearBoard}
               />
               {row[row.length-1] === item ? <span className='break'></span> : ""}
             </>
@@ -36,24 +64,38 @@ function Board() {
 
 function Cell(props) {
   const [isClicked, setIsClicked] = useState(props.isClicked);
-  //const [isFlagged, setIsFlagged] = useState(props.isFlagged);
-  
-   return (
-    <div className="Cell" id={props.id} 
-    onClick={() => {
-        if(!isClicked)
-          setIsClicked(true);
+  const [isFlagged, setIsFlagged] = useState(props.isFlagged);
+
+  const handleClick = (e) => {
+    if(e.type === "click"){
+      if(!isClicked && !isFlagged){
+        setIsClicked(true);
+        if(props.isBomb){
+          const loseScreen = document.getElementById("LoseScreen");
+          loseScreen?.classList.add("visibility");
+          //props.clearBoard();
+        }
       }
     }
-    click>
-      {isClicked ? props.isBomb ? "💣" : `${props.numSurroundingBombs}` : ""}
-    </div>
-   );
+    if(e.type === "contextmenu"){
+      e.preventDefault();
+    if(!isClicked)
+      setIsFlagged(!isFlagged);
+    }
+  }
+
+  return (
+  <div className="Cell" id={props.id} 
+  onClick={handleClick}
+  onContextMenu={handleClick}>
+    {isClicked ? props.isBomb ? '💣' : `${props.numSurroundingBombs}` : isFlagged ? `🚩` : ""}
+  </div>
+  );
 }
 
-function createBoard(r, c) {
+function createBoard(r, c, difficultyLevel) {
   const grid = [];
-  const numBombs = Math.floor((r * c) / 4.5);
+  const numBombs = Math.floor((r * c) / difficultyLevel);
 
   for (let i = 0; i < r; i++){
       const row = [];
