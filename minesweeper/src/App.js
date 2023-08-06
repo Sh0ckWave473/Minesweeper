@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function App() {
   const numBombs = Math.floor((8 * 8) / 4.5);
@@ -29,52 +29,86 @@ function App() {
   );
 }
 
-function Board(props) {
-  const cells = createBoard(props.dimension, props.dimension, props.difficulty);
-  // const clearBoard = () => {
-  //   cells.map((row) => {
-  //     row.map((item) => {
-  //       item.isFlagged = false;
-  //       item.isClicked = true;
-  //     });
-  //   });
-  // }
+class Board extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isGameStarted: false,
+      isGameOver: false,
+      //Might want to change this to making an empty board in the future
+      cells: createBoard(props.dimension,props.dimension,props.difficulty),
+      cellsClicked: 0
+    };
+  }
 
-  return cells.map((row) => {
-      return( row.map((item) => {
-          return(
-            <>
-              <Cell
-                numSurroundingBombs={item.numSurroundingBombs}
-                id={`${item.row}-${item.col}`}
-                row={item.row}
-                col={item.col}
-                isFlagged={item.isFlagged}
-                isClicked={item.isClicked}
-                isBomb={item.isBomb}
-                //clearBoard={clearBoard}
+  incrementCellsClicked = () => {
+    this.setState({cellsClicked: this.state.cellsClicked+1});
+    console.log(this.state.cellsClicked);
+  }
+
+  changeIsGameOver = () => {
+    this.setState({isGameOver: true})
+  }
+  
+  changeIsGameStarted = (r, c) => {
+    this.setState({
+      isGameStarted: true
+    })
+    //Do some method to fill the board at this point
+    console.log(`${r}-${c}`)
+  }
+
+  render() {
+    if(this.state.cellsClicked === 50)
+      return <h4>YOU WIN!!!</h4>;
+    return this.state.cells.map((row) => {
+        return (row.map((item) => {
+          return (<>
+            <Cell
+              numSurroundingBombs={item.numSurroundingBombs}
+              id={`${item.row}-${item.col}`}
+              row={item.row}
+              col={item.col}
+              isFlagged={item.isFlagged}
+              isClicked={item.isClicked}
+              isBomb={item.isBomb}
+              incrementCellsClicked={this.incrementCellsClicked}
+              isGameStarted={this.state.isGameStarted}
+              isGameOver={this.state.isGameOver}
+              setIsGameStarted={this.changeIsGameStarted}
+              setIsGameOver={this.changeIsGameOver}
               />
-              {row[row.length-1] === item ? <span className='break'></span> : ""}
-            </>
-          );
-        })
-      );
-    });;
+            {row[row.length-1] === item ? <span className='break'></span> : ""}
+          </>);
+        }));
+      });;
+  }
 }
 
 function Cell(props) {
   const [isClicked, setIsClicked] = useState(props.isClicked);
   const [isFlagged, setIsFlagged] = useState(props.isFlagged);
 
+  useEffect(() => 
+  {
+    if(props.isGameOver)
+      setIsClicked(true);
+  }
+  , [props.isGameOver]);
+
   const handleClick = (e) => {
+    if(!props.isGameStarted)
+      props.setIsGameStarted(props.row, props.col);
     if(e.type === "click"){
       if(!isClicked && !isFlagged){
         setIsClicked(true);
         if(props.isBomb){
           const loseScreen = document.getElementById("LoseScreen");
           loseScreen?.classList.add("visibility");
-          //props.clearBoard();
+          props.setIsGameOver();
+          return;
         }
+        props.incrementCellsClicked();
       }
     }
     if(e.type === "contextmenu"){
