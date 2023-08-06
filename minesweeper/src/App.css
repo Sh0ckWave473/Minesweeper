@@ -15,6 +15,17 @@ h2 {
 
 h5 {
   margin: auto;
+  display: inline-block;
+  background-color: rgb(90, 99, 102);
+  border-radius: 10px;
+  padding: 0 .2em 0 .2em;
+}
+
+.Board {
+  display: inline-block;
+  background-color: rgb(90, 99, 102);
+  padding: .25em .15em .1em .15em;
+  border-radius: 10px;
 }
 
 .break {
@@ -37,13 +48,43 @@ h5 {
   text-shadow: black 1px 1px;
   font-weight: bold;
   user-select: none;
+  transform: background-color .5s ease-in-out;
+}
+
+.Cell:hover {
+  background-color: rgb(191, 191, 191);
+  animation: rotate .1s ease-in-out;
+  animation-fill-mode: both;
+}
+
+@keyframes rotate {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(5deg);}
 }
 
 .helpButton {
   display: inline-block;
   background-color: lightgrey;
   border-radius: 100px;
-  padding: 0px 10px 0px 10px;
+  padding: 0px 12px 0px 12px;
+  transition: background-color .5s ease-in-out;
+  transition: padding .1s ease-in-out;
+  margin-top: .1em;
+}
+
+.helpButton:hover {
+  background-color: rgb(90, 99, 102);
+  padding: 2px 13px 2px 13px;
+}
+
+.helpButton:active {
+  background-color: grey;
+  padding: 2px 13px 2px 13px;
+}
+
+@keyframes expand {
+  from {transform: scaleX(1) scaleY(1); background-color: lightgrey;}
+  to {transform: scaleX(1.1) scaleY(1.1); background-color: grey;}
 }
 
 .helpScreen {
@@ -64,6 +105,20 @@ h5 {
 }
 
 .LoseScreen {
+  position: absolute;
+  visibility: hidden;
+  background-color: #98a2b6;
+  opacity: 85%;
+  transform-origin: center;
+  left: 50%;
+  top: 50%;
+  width: 7.5em;
+  margin-left: -3.75em;
+  margin-top: -8.5em;
+  height: 8em;
+}
+
+.WinScreen {
   position: absolute;
   visibility: hidden;
   background-color: #98a2b6;
