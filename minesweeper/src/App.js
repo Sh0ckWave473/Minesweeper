@@ -25,9 +25,9 @@ class App extends React.Component {
         <div className='Board'>
           <Board dimension="8" difficulty="4.5" changeNumFlags={this.changeNumBombs} setGameWon={this.winGame}/>
         </div>
-        <br />
+        <span className='break'></span>
         <h5>Number of Bombs: {this.state.numBombs}</h5>
-        <br />
+        <span className='break'></span>
         <div className='helpButton'
         onClick={() => {
           const helpScreen = document.getElementById("helpScreen");
@@ -70,11 +70,16 @@ class Board extends React.Component {
     this.setState({isGameOver: true})
   }
   
-  changeIsGameStarted = (r, c) => {
-    this.setState({
-      isGameStarted: true,
-      cells: fillBoard(r, c, this.state.cells, 4.5)
-    })
+  clickedZeroCell = (r, c) => {
+    if(!this.state.isGameStarted){
+      this.setState({
+        isGameStarted: true,
+        cells: fillBoard(r, c, this.state.cells, 4.5)
+      })
+   }
+  //  else{
+  //     findingSurroundingCells(r, c, this.state.cells);
+  //  }
     console.log(`${r}-${c}`)
   }
 
@@ -99,7 +104,7 @@ class Board extends React.Component {
             incrementCellsClicked={this.incrementCellsClicked}
             isGameStarted={this.state.isGameStarted}
             isGameOver={this.state.isGameOver}
-            setIsGameStarted={this.changeIsGameStarted}
+            zeroCellClicked={this.clickedZeroCell}
             setIsGameOver={this.changeIsGameOver}
             setNumFlagsRemoved={this.changeNumFlags}
             numCellsClicked={this.state.cellsClicked}
@@ -124,8 +129,8 @@ function Cell(props) {
   , [props.isGameOver, props.numCellsClicked]);
 
   const handleClick = (e) => {
-    if(!props.isGameStarted)
-      props.setIsGameStarted(props.row, props.col);
+    if(!props.isGameStarted || props.numSurroundingBombs === 0)
+      props.zeroCellClicked(props.row, props.col);
     if(e.type === "click"){
       if(!isClicked && !isFlagged){
         setIsClicked(true);
@@ -211,6 +216,29 @@ function fillBoard(r, c, cells, difficultyLevel){
   }
 
   return grid;
+}
+
+// eslint-disable-next-line
+function findingSurroundingCells(r, c, cells){
+  const grid = [];
+  
+  for (let i = 0; i < cells.length; i++){
+    const row = [];
+    for(let j = 0; j < cells[0].length; j++)
+      row.push({needsToBeClicked: false});
+    grid.push(row);
+  }
+
+  for(let i = -1; i < 2; i++){
+    for(let j= -1 ; j < 2; j++) {
+      if(c+j >= 0 && c+j < grid[0].length && r+i >= 0 && r+i < grid.length){
+        grid[r+i][c+j].needsToBeClicked = true;
+        if(cells[r+i][c+j].numSurroundingBombs === 0){
+          findingSurroundingCells(r+i, c+j, cells);
+        }
+      }
+    }
+  }
 }
 
 export default App;
