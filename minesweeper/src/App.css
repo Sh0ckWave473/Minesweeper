@@ -52,6 +52,10 @@ h5 {
   transform: background-color .5s ease-in-out;
 }
 
+.isClicked {
+  background-color: darkgrey !important;
+}
+
 .Cell:hover {
   background-color: rgb(191, 191, 191);
   animation: rotate .1s ease-in-out;
@@ -106,6 +110,7 @@ h5 {
   transition: opacity .5s ease-in;
 }
 
+
 .LoseScreen {
   position: absolute;
   visibility: hidden;
@@ -140,5 +145,6 @@ h5 {
 
 .visibility {
   visibility: visible;
-  opacity: 85%;
+  transition: opacity .5s ease-in;
+  opacity: 92.5%;
 }
