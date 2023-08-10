@@ -29,8 +29,6 @@ function App() {
       <span className='break'></span>
       <h5>Number of Bombs: {numBombs}</h5>
       <span className='break'></span>
-      <label>There are currently bugs being worked on</label>
-      <span className='break'></span>
       <div className='helpButton'
       onClick={() => {
         const helpScreen = document.getElementById("helpScreen");
@@ -65,6 +63,12 @@ function Board(props) {
 
   const changeIsGameOver = () => {
     setIsGameOver((isGameOver) => !isGameOver);
+  }
+
+  const changeIsClickedForNonZeroCell = (r, c) => {
+    const tempCells = cells;
+    tempCells[r][c].isClicked = true;
+    setCells(tempCells);
   }
   
   const clickedZeroCell = (r, c) => {
@@ -113,6 +117,7 @@ function Board(props) {
           isGameStarted={isGameStarted}
           isGameOver={isGameOver}
           clickedZeroCell={clickedZeroCell}
+          changeIsClickedForNonZeroCell={changeIsClickedForNonZeroCell}
           changeIsGameOver={changeIsGameOver}
           changeNumFlags={changeNumFlags}
           cellsClicked={cellsClicked}
@@ -258,8 +263,10 @@ function Cell(props) {
           props.changeIsGameOver();
           return;
         }
-        if(props.numSurroundingBombs !== 0)
+        if(props.numSurroundingBombs !== 0){
           props.incrementCellsClicked(1);
+          props.changeIsClickedForNonZeroCell(props.row, props.col);
+        }
         console.log(props.cellsClicked);
       }
     }
