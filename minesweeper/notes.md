@@ -87,3 +87,9 @@ Flagging a square:
     
     - click and hold or select the type of click for mobile user using UI elements
     - all features for mobile will be available for computer but they can right click too
+
+# Important reminders!!!
+
+-  Utilizing functions within useState functions causes them to be used twice
+   so make sure to instantiate variables outside of the useState
+-  Classes have become obsolete so stick to using functions in React
