@@ -7,19 +7,56 @@
   font-size: calc(20px + 2vmin);
 }
 
-h2 {
+.Deco {
+  display: inline-block;
+  font-size: 1.5em;
+  text-shadow: black 2px 2px;
+}
+
+.flipped {
+  transform: scale(-1, 1);
+  text-shadow: black -2px 3px;
+}
+
+.Title {
+  font-family: "teko", sans-serif;
+  font-weight: 500;
+  display: inline-block;
+  padding: 0 .2em 0 .2em;
   text-align: center;
-  font-size: 52.2px;
+  background-color: rgb(90, 99, 102);
+  border-radius: 10px;
+  font-size: 58px;
+  line-height: 1.25em;
+  font-weight: bold;
   margin: auto;
-  text-shadow: black 1px 1px;
+  text-shadow: black 2px 2px;
+  box-shadow: black 1.5px 1.5px;
+  margin-top: .1em;
 }
 
 h5 {
+  font-family: "teko", sans-serif;
+  letter-spacing: .075em;
   margin: auto;
   display: inline-block;
   background-color: rgb(90, 99, 102);
   border-radius: 10px;
   padding: 0 .2em 0 .2em;
+  box-shadow: black 1.5px 1.5px;
+  text-shadow: black 1px 1px;
+}
+
+.Timer {
+  font-family: "teko", sans-serif;
+  font-weight: 500;
+  margin: auto;
+  display: inline-block;
+  background-color: rgb(90, 99, 102);
+  border-radius: 10px;
+  padding: 0 .2em 0 .2em;
+  box-shadow: black 1.5px 1.5px;
+  text-shadow: black 1px 1px;
 }
 
 .Board {
@@ -27,6 +64,7 @@ h5 {
   background-color: rgb(90, 99, 102);
   padding: .25em .15em .1em .15em;
   border-radius: 10px;
+  box-shadow: black 1.5px 1.5px;
 }
 
 .break {
@@ -39,6 +77,7 @@ h5 {
   margin-right: .1em;
   background-color: lightgrey;
   display: inline-block;
+  box-shadow: black 1.5px 1.5px;
   height: 1.5em;
   width: 1.5em;
   line-height: 1.5em;
@@ -71,10 +110,14 @@ h5 {
   display: inline-block;
   background-color: lightgrey;
   border-radius: 100px;
+  font-size: 24px;
   padding: 0px 12px 0px 12px;
   transition: background-color .5s ease-in-out;
   transition: padding .1s ease-in-out;
-  margin-top: .1em;
+  margin-top: -.1em;
+  margin-left: .5em;
+  box-shadow: black 1.5px 1.5px;
+  text-shadow: black 1px 1px;
 }
 
 .helpButton:hover {
@@ -95,52 +138,57 @@ h5 {
 .helpScreen {
   position: absolute;
   visibility: hidden;
-  background-color: #98a2b6;
+  background-color: rgb(90, 99, 102);
   opacity: 0%;
-  transform-origin: center;
-  font-size: x-large;
+  font-size: 24px;
+  text-align: center;
   color: white;
   left: 50%;
   top: 50%;
-  width: 14.75em;
-  margin-left: -7.5em;
-  margin-top: -300px;
+  box-shadow: black 1.5px 1.5px;
+  width: 15em;
+  padding: 0.25em;
+  margin-right: -50%;
+  transform: translate(-50%, -60%);
   height: 11em;
   border-radius: 5px;
   transition: opacity .5s ease-in;
+  text-shadow: black 1px 1px;
 }
 
 
 .LoseScreen {
   position: absolute;
   visibility: hidden;
-  background-color: #98a2b6;
+  box-shadow: black 1.5px 1.5px;
+  background-color: rgb(90, 99, 102);
   opacity: 0%;
-  transform-origin: center;
   left: 50%;
   top: 50%;
-  width: 7.5em;
-  margin-left: -3.75em;
-  margin-top: -8.5em;
+  margin-right: -50%;
+  transform: translate(-50%, -60%);
+  width: 8em;
   height: 8em;
   border-radius: 5px;
   transition: opacity .5s ease-in;
+  text-shadow: black 1px 1px;
 }
 
 .WinScreen {
   position: absolute;
   visibility: hidden;
-  background-color: #98a2b6;
+  box-shadow: black 1.5px 1.5px;
+  background-color: rgb(90, 99, 102);
   opacity: 0%;
-  transform-origin: center;
   left: 50%;
   top: 50%;
-  width: 7.5em;
-  margin-left: -3.75em;
-  margin-top: -8.5em;
+  margin-right: -50%;
+  transform: translate(-50%, -60%);
+  width: 8em;
   height: 8em;
   border-radius: 5px;
   transition: opacity .5s ease-in;
+  text-shadow: black 1px 1px;
 }
 
 .visibility {

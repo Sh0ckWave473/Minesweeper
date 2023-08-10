@@ -7,28 +7,42 @@ import React, { useState, useEffect } from 'react';
 
 function App() {
   const [numBombs, setNumBombs] = useState(Math.floor((8 * 8) / 5));
-  const [play] = useSound(winSound);
+  const [isGamePlaying, setIsGamePlaying] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [play] = useSound(winSound, { volume: .10 });
   
+  const changeIsGamePlaying = (truthValue) => {
+    setIsGamePlaying(truthValue);
+  }
+
   const winGame = () => {
     play();
     const winScreen = document.getElementById("WinScreen");
+    setIsGameOver(true);
     winScreen?.classList.add("visibility");
   }
 
   return (
     <div className="App">
-      <h2>MINESWEEPER</h2>
+      <div className='Deco flipped'>🚩</div>
+      <div className="Title">MINESWEEPER</div>
+      <div className='Deco'>🚩</div>
+      <span className='break'></span>
+      <Timer isGamePlaying={isGamePlaying}/>
+      <span className='break'></span>
       <div className='Board'>
         <Board
           dimension="8"
           difficulty="5"
           changeNumFlags={setNumBombs}
           setGameWon={winGame}
+          changeIsGamePlaying={changeIsGamePlaying}
+          isGameOver={isGameOver}
+          setIsGameOver={setIsGameOver}
         />
       </div>
       <span className='break'></span>
-      <h5>Number of Bombs: {numBombs}</h5>
-      <span className='break'></span>
+      <h5>Number of Bombs: {isGameOver ? '0' : numBombs}</h5>
       <div className='helpButton'
       onClick={() => {
         const helpScreen = document.getElementById("helpScreen");
@@ -50,9 +64,34 @@ function App() {
   );
 }
 
+function Timer(props) {
+  const [numSeconds, setNumSeconds] = useState(0);
+  const [numMinutes, setNumMinutes] = useState(0);
+
+  useEffect(() => {
+    let timer = setInterval(() => {
+      if (props.isGamePlaying) {
+        setNumSeconds((num) => num + 1);
+        if (numSeconds === 59) {
+          setNumSeconds(0);
+          setNumMinutes((num) => num + 1);
+        }
+      }
+    }, 1000);
+    return () => { clearInterval(timer); };
+  });
+
+  return (
+    <b className="Timer">
+      {numMinutes < 10 ? `0${JSON.stringify(numMinutes)}` : JSON.stringify(numMinutes)}
+      :
+      {numSeconds < 10 ? `0${JSON.stringify(numSeconds)}` : JSON.stringify(numSeconds)}
+    </b>
+  );
+}
+
 function Board(props) {
   const [isGameStarted, setIsGameStarted] = useState(false);
-  const [isGameOver, setIsGameOver] = useState(false);
   const [cells, setCells] = useState(createEmptyBoard(8, 8));
   const [cellsClicked, setCellsClicked] = useState(0);
 
@@ -62,12 +101,19 @@ function Board(props) {
   }
 
   const changeIsGameOver = () => {
-    setIsGameOver((isGameOver) => !isGameOver);
+    props.setIsGameOver((isGameOver) => !isGameOver);
+    props.changeIsGamePlaying(false);
   }
 
   const changeIsClickedForNonZeroCell = (r, c) => {
     const tempCells = cells;
     tempCells[r][c].isClicked = true;
+    setCells(tempCells);
+  }
+
+  const changeIsFlagged = (r, c) => {
+    const tempCells = cells;
+    tempCells[r][c].isFlagged = !tempCells[r][c].isFlagged;
     setCells(tempCells);
   }
   
@@ -76,11 +122,10 @@ function Board(props) {
     if(!isGameStarted){
       const tempCells = fillBoard(r, c, cells, props.difficulty);
       setIsGameStarted(true);
+      props.changeIsGamePlaying(true);
       setCells(tempCells);
-      console.log("game rendered");
     }
     const grid = checkingSurroundingCells(r, c, cells);
-    console.log(grid);
     const tempCells = cells;
     for(let i = 0; i < tempCells.length; i++){
       for(let j = 0; j < tempCells[0].length; j++){
@@ -99,8 +144,10 @@ function Board(props) {
     props.changeNumFlags((numBombs) => numBombs+changeInFlags);
   }
   
-  if(cellsClicked === 52)
+  if(cellsClicked === 52){
     props.setGameWon();
+    props.changeIsGamePlaying(false);
+  }
 
   return cells.map((row) => {
     return (row.map((item) => {
@@ -115,9 +162,10 @@ function Board(props) {
           isBomb={item.isBomb}
           incrementCellsClicked={incrementCellsClicked}
           isGameStarted={isGameStarted}
-          isGameOver={isGameOver}
+          isGameOver={props.isGameOver}
           clickedZeroCell={clickedZeroCell}
           changeIsClickedForNonZeroCell={changeIsClickedForNonZeroCell}
+          changeIsFlagged={changeIsFlagged}
           changeIsGameOver={changeIsGameOver}
           changeNumFlags={changeNumFlags}
           cellsClicked={cellsClicked}
@@ -234,7 +282,6 @@ function Cell(props) {
     setIsClicked(props.isClicked);
     if(props.isClicked){
       document.getElementById(props.id)?.classList.add('isClicked');
-      console.log(props.cellsClicked);
     }
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -267,7 +314,6 @@ function Cell(props) {
           props.incrementCellsClicked(1);
           props.changeIsClickedForNonZeroCell(props.row, props.col);
         }
-        console.log(props.cellsClicked);
       }
     }
     if(e.type === "contextmenu"){
@@ -279,6 +325,7 @@ function Cell(props) {
           props.changeNumFlags(-1);
         playFlag();
         setIsFlagged(!isFlagged);
+        props.changeIsFlagged(props.row, props.col);
         navigator.vibrate(50);
       }
     }
