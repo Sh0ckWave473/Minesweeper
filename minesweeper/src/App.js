@@ -70,16 +70,17 @@ function Timer(props) {
 
   useEffect(() => {
     let timer = setInterval(() => {
+      console.log(numMinutes + ":" + numSeconds);
       if (props.isGamePlaying) {
         setNumSeconds((num) => num + 1);
         if (numSeconds === 59) {
-          setNumSeconds(0);
+          setNumSeconds(() => 0);
           setNumMinutes((num) => num + 1);
         }
       }
     }, 1000);
     return () => { clearInterval(timer); };
-  });
+  }, [numMinutes, numSeconds, props.isGamePlaying]);
 
   return (
     <b className="Timer">
@@ -140,8 +141,12 @@ function Board(props) {
     numRevealed = 0;
   }
 
-  const changeNumFlags = (changeInFlags) => {
-    props.changeNumFlags((numBombs) => numBombs+changeInFlags);
+  const addFlag = () => {
+    props.changeNumFlags((numBombs) => numBombs+1);
+  }
+
+  const removeFlag = () => {
+    props.changeNumFlags((numBombs) => numBombs-1);
   }
   
   if(cellsClicked === 52){
@@ -167,7 +172,8 @@ function Board(props) {
           changeIsClickedForNonZeroCell={changeIsClickedForNonZeroCell}
           changeIsFlagged={changeIsFlagged}
           changeIsGameOver={changeIsGameOver}
-          changeNumFlags={changeNumFlags}
+          addFlag={addFlag}
+          removeFlag={removeFlag}
           cellsClicked={cellsClicked}
           cells={cells}
           />
@@ -320,9 +326,9 @@ function Cell(props) {
       e.preventDefault();
       if(!isClicked && props.isGameStarted){
         if(isFlagged)
-          props.changeNumFlags(1);
+          props.addFlag();
         else
-          props.changeNumFlags(-1);
+          props.removeFlag();
         playFlag();
         setIsFlagged(!isFlagged);
         props.changeIsFlagged(props.row, props.col);
