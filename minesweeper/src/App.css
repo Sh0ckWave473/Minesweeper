@@ -7,6 +7,25 @@
   font-size: calc(20px + 2vmin);
 }
 
+.ReloadButton {
+  font-size: 32px;
+  font-family: "teko", sans-serif;
+  text-shadow: black 1px 1px;
+  border-radius: 10px;
+  color: white;
+  background-color: darkgrey;
+  transition: padding 0.1s ease-in-out;
+}
+
+.ReloadButton:hover {
+  padding: 0.1em 0.5em 0.1em 0.5em;
+  background-color: rgb(90, 99, 102);
+}
+
+.ReloadButton:active {
+  background-color: grey;
+}
+
 .Deco {
   display: inline-block;
   font-size: 1.5em;
@@ -112,7 +131,6 @@ h5 {
   border-radius: 100px;
   font-size: 24px;
   padding: 0px 12px 0px 12px;
-  transition: background-color .5s ease-in-out;
   transition: padding .1s ease-in-out;
   margin-top: -.1em;
   margin-left: .5em;
@@ -136,12 +154,13 @@ h5 {
 }
 
 .helpScreen {
+  font-family: "teko", sans-serif;
   position: absolute;
   visibility: hidden;
   background-color: rgb(90, 99, 102);
-  opacity: 0%;
   font-size: 24px;
   text-align: center;
+  line-height: 2;
   color: white;
   left: 50%;
   top: 50%;
@@ -150,14 +169,18 @@ h5 {
   padding: 0.25em;
   margin-right: -50%;
   transform: translate(-50%, -60%);
-  height: 11em;
+  height: 10em;
   border-radius: 5px;
   transition: opacity .5s ease-in;
   text-shadow: black 1px 1px;
 }
 
 
-.LoseScreen {
+.OverlayScreen {
+  font-family: "teko", sans-serif;
+  letter-spacing: 0.075em;
+  font-weight: 500;
+  font-size: 64px;
   position: absolute;
   visibility: hidden;
   box-shadow: black 1.5px 1.5px;
@@ -167,25 +190,8 @@ h5 {
   top: 50%;
   margin-right: -50%;
   transform: translate(-50%, -60%);
-  width: 8em;
-  height: 8em;
-  border-radius: 5px;
-  transition: opacity .5s ease-in;
-  text-shadow: black 1px 1px;
-}
-
-.WinScreen {
-  position: absolute;
-  visibility: hidden;
-  box-shadow: black 1.5px 1.5px;
-  background-color: rgb(90, 99, 102);
-  opacity: 0%;
-  left: 50%;
-  top: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -60%);
-  width: 8em;
-  height: 8em;
+  width: 5em;
+  height: 3em;
   border-radius: 5px;
   transition: opacity .5s ease-in;
   text-shadow: black 1px 1px;
@@ -193,6 +199,10 @@ h5 {
 
 .visibility {
   visibility: visible;
-  transition: opacity .5s ease-in;
   opacity: 92.5%;
+}
+
+.fading {
+  transition: opacity .5s ease-in;
+  opacity: 0%;
 }

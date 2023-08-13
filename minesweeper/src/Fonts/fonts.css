@@ -1,0 +1,5 @@
+@font-face {
+    font-family: 'Teko-Medium';
+    src: local('Teko-Medium'),
+         url('./Teko/Teko-Medium.ttf') format('ttf');
+}

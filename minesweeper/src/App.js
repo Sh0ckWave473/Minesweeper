@@ -2,14 +2,15 @@ import './App.css';
 import explosionSound from './Audio/explosion.wav';
 import useSound from 'use-sound';
 import winSound from './Audio/mixkit-instant-win-2021.wav';
-import flagSound from './Audio/canvas-dropcloth-snap-2-98861.wav';
+import flagSound from './Audio/Flag.wav';
 import React, { useState, useEffect } from 'react';
+import { zero, one, two, three, four, five, six, seven, eight } from './Audio/CellSounds.js';
 
 function App() {
   const [numBombs, setNumBombs] = useState(Math.floor((8 * 8) / 5));
   const [isGamePlaying, setIsGamePlaying] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
-  const [play] = useSound(winSound, { volume: .10 });
+  const [play] = useSound(winSound, { volume: .50 });
   
   const changeIsGamePlaying = (truthValue) => {
     setIsGamePlaying(truthValue);
@@ -20,6 +21,10 @@ function App() {
     const winScreen = document.getElementById("WinScreen");
     setIsGameOver(true);
     winScreen?.classList.add("visibility");
+  }
+
+  const restartGame = () => {
+    window.location.reload();
   }
 
   return (
@@ -46,17 +51,38 @@ function App() {
       <div className='helpButton'
       onClick={() => {
         const helpScreen = document.getElementById("helpScreen");
-        if(helpScreen?.classList.contains("visibility"))
-          helpScreen?.classList.remove("visibility");
-        else
+        if(helpScreen?.classList.contains("visibility")) {
+          helpScreen?.classList.add("fading");
+          setTimeout(() => {
+            helpScreen?.classList.remove("visibility");
+          }, 500);
+        }
+        else{
           helpScreen?.classList.add("visibility");
+          helpScreen?.classList.remove("fading");
+        }
       }}
       ><i className="fa-sharp fa-solid fa-question" /></div>
-      <div className='LoseScreen' id="LoseScreen"><h4>You Lose</h4>Refresh to try again!</div>
-      <div className='WinScreen' id="WinScreen"><h4>You Win!!!</h4>Refresh to try again!</div>
-      <div className='helpScreen' id='helpScreen'>
+      <div className='OverlayScreen' id="LoseScreen">
+        You Lost<br />
+        <button
+          className='ReloadButton'
+          onClick={restartGame}>
+        Click me to try again!
+        </button>
+      </div>
+      <div className='OverlayScreen' id="WinScreen">
+        You Win!!!<br />
+        <button
+          className='ReloadButton'
+          onClick={restartGame}>
+        Click me to try again!
+        </button>
+      </div>
+      <div className='helpScreen fading' id='helpScreen'>
         Left Click (tap the screen) to reveal the square.<br />
         Right Click (hold the screen) to place a flag.<br />
+        Each cell reveals the number of bombs around it.<br />
         Reveal all the squares without bombs to win!<br />
         Click the help button to close this popup.
       </div>
@@ -70,7 +96,6 @@ function Timer(props) {
 
   useEffect(() => {
     let timer = setInterval(() => {
-      console.log(numMinutes + ":" + numSeconds);
       if (props.isGamePlaying) {
         setNumSeconds((num) => num + 1);
         if (numSeconds === 59) {
@@ -283,6 +308,15 @@ function Cell(props) {
   const [isFlagged, setIsFlagged] = useState(props.isFlagged);
   const [playBomb] = useSound(explosionSound);
   const [playFlag] = useSound(flagSound);
+  const [playZero] = useSound(zero);
+  const [playOne] = useSound(one);
+  const [playTwo] = useSound(two);
+  const [playThree] = useSound(three);
+  const [playFour] = useSound(four);
+  const [playFive] = useSound(five);
+  const [playSix] = useSound(six);
+  const [playSeven] = useSound(seven);
+  const [playEight] = useSound(eight);
 
   useEffect(() => {
     setIsClicked(props.isClicked);
@@ -303,8 +337,10 @@ function Cell(props) {
   , [props.isGameOver, props.cellsClicked, props.id]);
 
   const handleClick = (e) => {
-    if(props.numSurroundingBombs === 0 && e.type !== "contextmenu" && !isClicked)
+    if(props.numSurroundingBombs === 0 && e.type !== "contextmenu" && !isClicked){
       props.clickedZeroCell(props.row, props.col);
+      playZero();
+    }
     if(e.type === "click"){
       if(!isClicked && !isFlagged){
         setIsClicked(true);
@@ -319,6 +355,22 @@ function Cell(props) {
         if(props.numSurroundingBombs !== 0){
           props.incrementCellsClicked(1);
           props.changeIsClickedForNonZeroCell(props.row, props.col);
+          if(props.numSurroundingBombs === 1)
+            playOne();
+          if(props.numSurroundingBombs === 2)
+            playTwo();
+          if(props.numSurroundingBombs === 3)
+            playThree();
+          if(props.numSurroundingBombs === 4)
+            playFour();
+          if(props.numSurroundingBombs === 5)
+            playFive();
+          if(props.numSurroundingBombs === 6)
+            playSix();
+          if(props.numSurroundingBombs === 7)
+            playSeven();
+          if(props.numSurroundingBombs === 8)
+            playEight();
         }
       }
     }
