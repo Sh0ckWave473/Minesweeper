@@ -134,6 +134,7 @@ h5 {
   transition: padding .1s ease-in-out;
   margin-top: -.1em;
   margin-left: .5em;
+  margin-right: .5em;
   box-shadow: black 1.5px 1.5px;
   text-shadow: black 1px 1px;
 }
