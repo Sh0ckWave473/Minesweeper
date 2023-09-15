@@ -95,7 +95,7 @@ function App() {
         onClick={handleClick}>
         <i className="fa-sharp fa-solid fa-question" />
       </div>
-      <h5>Best Dev Time: 00:10</h5>
+      <h5>Best Dev Time: 00:07</h5>
       <div className='OverlayScreen' id="LoseScreen">
         You Lost<br />
         <button
